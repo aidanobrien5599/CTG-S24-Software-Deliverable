@@ -9,6 +9,7 @@ root_path = 'task_1/data'
 with open('task_1/tickers.txt', 'r') as file:
     tickers = file.read().splitlines()
 
+
 df = pd.DataFrame()
 
 for ticker in tickers:
@@ -16,15 +17,21 @@ for ticker in tickers:
     data = pd.read_csv(root_path + "/" + ticker + ".csv", index_col=0)  # Set index_col to 0 to use the first column as index
     
     close  = np.array(data.loc[:, "Close"])
-    close_5_days_ago = np.array(data.loc[:, "Close"])
-    close_5_days_ago = np.roll(close_5_days_ago, 5)
-    momentum = ((((close - close_5_days_ago)))/close_5_days_ago) * 100
-    momentum[:5] = np.nan
+    
+    open = np.array(data.loc[:, "Open"])
+    open_14_days_ago = np.roll(open, 14)
+    
+    prev_day_volume = np.array(data.loc[:, "Volume"])
+    prev_day_volume = np.roll(prev_day_volume, 1)
+    
+    momentum = (((close - open_14_days_ago)) * 100)/prev_day_volume
+    momentum = np.roll(momentum, 1)
+    momentum[:15] = np.nan
     df[ticker] = momentum
 
 # Set the index of df to match the index of data
 df.index = data.index
 
-df.to_csv('task_2/price_momentum/price_momentum.csv')
+df.to_csv('task_2/volume_adj_momentum/volume_adj_momentum.csv')
     
     
