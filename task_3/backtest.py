@@ -13,7 +13,10 @@ class BacktestStrategy:
         top_5_returns = []
         even_returns = []
 
-        for date, row in self.factors.iterrows():
+        #loop through the range of the factors-1
+        for i in range(0, len(self.factors)-1):
+            row = self.factors.iloc[i]  # Fetch row by index
+            date = self.factors.index[i+1]  # Fetch data shifting up date by one to avoid look-over bias 
             sorted_tickers = row.sort_values(ascending=False)
             top_5_tickers = sorted_tickers.nlargest(5).index
 

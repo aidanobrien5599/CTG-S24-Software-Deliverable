@@ -15,16 +15,18 @@ df = pd.DataFrame()
 for ticker in tickers:
     # Use cleaned data from prev csv file
     data = pd.read_csv(root_path + "/" + ticker + ".csv", index_col=0)  # Set index_col to 0 to use the first column as index
-    
+    #closing array
     close  = np.array(data.loc[:, "Close"])
     
-    open = np.array(data.loc[:, "Open"])
-    open_14_days_ago = np.roll(open, 14)
+    open = np.array(data.loc[:, "Open"]) #open array
     
-    prev_day_volume = np.array(data.loc[:, "Volume"])
-    prev_day_volume = np.roll(prev_day_volume, 1)
+    open_14_days_ago = np.roll(open, 14) #get open 14 days ago for a period of 15 days between open and close
+    
+    prev_day_volume = np.array(data.loc[:, "Volume"]) 
     
     momentum = (((close - open_14_days_ago)) * 100)/prev_day_volume
+    
+    #roll one so that the close of the previous day is matches with the factor of the current day
     momentum = np.roll(momentum, 1)
     momentum[:15] = np.nan
     df[ticker] = momentum
