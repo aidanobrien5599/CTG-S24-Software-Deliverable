@@ -26,9 +26,11 @@ for ticker in tickers:
     
     # Handle missing values
     df.fillna(method='ffill', inplace=True)  # Fill with previous values
- 
+
     ## changing to the date format
     df.index = pd.to_datetime(df.index, format = '%m/%d/%Y').strftime('%m/%d/%Y')
+
+    
     
     #create outputfile using os in the data directory
     output_file = os.path.join(output_directory, f"{ticker}.csv")
