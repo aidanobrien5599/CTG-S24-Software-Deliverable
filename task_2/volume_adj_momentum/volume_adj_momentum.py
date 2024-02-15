@@ -24,7 +24,7 @@ for ticker in tickers:
     
     prev_day_volume = np.array(data.loc[:, "Volume"]) 
     
-    momentum = (((close - open_14_days_ago)) * 100)/prev_day_volume
+    momentum = (((close - open_14_days_ago))/prev_day_volume)*100
     
     #roll one so that the close of the previous day is matches with the factor of the current day
     momentum = np.roll(momentum, 1)
